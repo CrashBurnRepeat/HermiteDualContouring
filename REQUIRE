@@ -1,1 +1,5 @@
 julia 0.6
+RegionTrees
+Optim
+LineSearches
+ConstructiveSolidGeometry

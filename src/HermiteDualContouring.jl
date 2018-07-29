@@ -2,10 +2,12 @@ module HermiteDualContouring
 
 using RegionTrees
 using ConstructiveSolidGeometry: Surface, distance_field, normal_field, unitize
-using Optim: optimize, GoldenSection
+using Optim
 using LineSearches
 
 import RegionTrees: needs_refinement, refine_data
+
+export HermiteDualContour
 
 type DualContourRefinery{S<:Surface} <: AbstractRefinery
     surface_def::S

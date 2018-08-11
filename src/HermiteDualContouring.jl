@@ -9,7 +9,7 @@ import RegionTrees: needs_refinement, refine_data
 
 export HermiteDualContour
 
-type DualContourRefinery{S<:Surface} <: AbstractRefinery
+struct DualContourRefinery{S<:Surface} <: AbstractRefinery
     surface_def::S
     atol::Float64
     rtol::Float64
@@ -61,7 +61,7 @@ function refine_data(refinery::DualContourRefinery, cell::Cell, indices)
     refine_data(refinery, child_boundary(cell, indices))
 end
 
-type CellData
+struct CellData
     edges
     p
     n
@@ -185,7 +185,7 @@ function refine_data(refinery::DualContourRefinery, boundary::HyperRectangle)
         residual)
 end
 
-immutable HermiteDualContour{C<:Cell} <: Surface
+struct HermiteDualContour{C<:Cell} <: Surface
     root::C
 end
 

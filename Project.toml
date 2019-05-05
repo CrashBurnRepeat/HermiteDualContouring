@@ -1,7 +1,7 @@
 name = "HermiteDualContouring"
 uuid = "03385d10-d217-5087-be55-6cd5a34e1b57"
 author = ["David Perner <david@crashburnrepeat.com>"]
-version = "0.0.0"
+version = "0.0.1"
 
 [deps]
 ConstructiveSolidGeometry = "58134239-9cb3-5d87-adce-67568cd73197"

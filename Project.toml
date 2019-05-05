@@ -1,0 +1,13 @@
+name = "HermiteDualContouring"
+uuid = "03385d10-d217-5087-be55-6cd5a34e1b57"
+author = ["David Perner <david@crashburnrepeat.com>"]
+version = "0.0.0"
+
+[deps]
+ConstructiveSolidGeometry = "58134239-9cb3-5d87-adce-67568cd73197"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+RegionTrees = "dee08c22-ab7f-5625-9660-a9af2021b33f"
+Roots = "f2b01f46-fcfa-551c-844a-d8ac1e96c665"
+
+[compat]
+julia = ">=0.7"

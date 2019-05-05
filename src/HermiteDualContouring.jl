@@ -2,8 +2,8 @@ module HermiteDualContouring
 
 using RegionTrees
 using ConstructiveSolidGeometry: Surface, distance_field, normal_field, unitize
-using Optim
-using LineSearches
+using Roots
+using LinearAlgebra
 
 import RegionTrees: needs_refinement, refine_data
 
@@ -18,12 +18,10 @@ end
 
 function find_surface_intersect(v1, v2, contour::T) where {T<:Surface}
     edge_func = (α)->v1+α*(v2-v1)
-    line_func = (α)->(distance_field(contour, edge_func(α))^2)
+    line_func = (α)->distance_field(contour, edge_func(α))
     #Because of how edge_func is parameterized, the range is always [0,1]
-    result = optimize(line_func,0.0,1.0,GoldenSection())
-    α_final = Optim.minimizer(result)
-    p = edge_func(α_final)
-    return p
+    α_final = find_zero(line_func,(0,1))
+    return edge_func(α_final)
 end
 
 function needs_refinement(refinery::DualContourRefinery, cell::Cell)
@@ -108,7 +106,7 @@ function refine_data(refinery::DualContourRefinery, boundary::HyperRectangle)
     #logic to check if cell is entirely in/outside of surface
     val_array = map((x)->distance_field(refinery.surface_def, x), vert_array)#for now, 2D
     sign_set = Set(sign.(val_array))
-    is_on_plane = length(val_array)-countnz(val_array)>1 && -1.0 in sign_set
+    is_on_plane = length(val_array)-count(!iszero,val_array)>1 && -1.0 in sign_set
     is_not_on_surface = length(sign_set)==1 && !(0.0 in sign_set || -0.0 in sign_set) #what to do if all verts are on surface?
     has_single_corner = (length(sign_set)<3 && (0.0 in sign_set || -0.0 in sign_set)) #because floats are terrible
     if  !is_on_plane && (is_not_on_surface || has_single_corner)
@@ -164,7 +162,7 @@ function refine_data(refinery::DualContourRefinery, boundary::HyperRectangle)
         end
         if !isnan(residual)
             #occurs when a cell corner aligns with a surface corner, needs to be adjusted for dimensionality
-            corner_idx = find(i->isapprox(i,qef_min), p)
+            corner_idx = findall(i->isapprox(i,qef_min), p)
             if !isempty(corner_idx) && length(p)>2
                 deleteat!(edges, corner_idx)
                 deleteat!(p, corner_idx)
